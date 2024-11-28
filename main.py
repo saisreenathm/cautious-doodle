@@ -1,28 +1,23 @@
-import time
-import re
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import time
+import re
 
-# Print a startup message
 print("Hello I'm starting the project")
 
-# Setup Chrome options for headless operation in Google Cloud Shell
+# Set up ChromeOptions
 options = Options()
-options.add_argument('--headless')  # Ensure headless mode
-options.add_argument('--no-sandbox')  # Run Chrome without sandboxing (necessary for Linux environments)
-options.add_argument('--disable-dev-shm-usage')  # Overcome resource issues in some environments
-options.add_argument('--disable-gpu')  # Disable GPU acceleration
-options.add_argument('--window-size=1920x1080')  # Set window size for headless mode
+options.add_argument('--headless')
+options.add_argument('--no-sandbox')
+options.add_argument('--disable-dev-shm-usage')
+options.binary_location = '/usr/bin/chromium-browser'  # Update with the correct path
 
-# Set the binary location to Chromium's path (Google Cloud Shell default)
-options.binary_location = '/usr/bin/chromium-browser'
-
-# Set up the WebDriver with Chromium
-driver = webdriver.Chrome(service=Service('/usr/lib/chromium-browser/chromedriver'), options=options)
+# Initialize the WebDriver with the updated options
+driver = webdriver.Chrome(options=options)
 
 # Function to retrieve video description and timestamps
 def get_video_description(url):
@@ -48,7 +43,7 @@ def get_video_description(url):
 
     # Wait for the "Show More" button to be clickable and click it
     try:
-        time.sleep(5)  # Adding a small delay before trying to expand description
+        time.sleep(5)
         expand_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "expand")))
         expand_button.click()
     except Exception as e:
